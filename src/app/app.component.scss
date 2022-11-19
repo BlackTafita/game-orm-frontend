@@ -1,0 +1,18 @@
+:host {
+    max-height: 100%;
+}
+.container {
+    height: calc(85vh - 2em);
+    width: calc(100% - 2em);
+    padding: 1em;
+}
+
+footer {
+    height: 8vh;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
