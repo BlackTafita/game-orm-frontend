@@ -14,11 +14,18 @@ export class ThemesService {
   constructor(private http: HttpClient) { }
 
   getThemes(): Observable<Theme[]> {
-    console.log(this.themeAPIUrl, this.http);
     return this.http.get(this.themeAPIUrl)
     .pipe(
       map((res: any) => res as Theme[]),
       catchError((err) => EMPTY)
+    );
+  }
+
+  createTheme(body: {name: string}): Observable<Theme> {
+    return this.http.post(this.themeAPIUrl, body)
+    .pipe(
+      map((res: any) => res as Theme),
+      catchError(err => EMPTY)
     );
   }
 }

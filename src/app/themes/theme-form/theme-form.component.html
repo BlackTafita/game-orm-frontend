@@ -1,2 +1,17 @@
-<p>theme-form works!</p>
-<button mat-raised-button color="warning" (click)="close()">Close</button>
+<mat-card>
+    <mat-card-header>
+        <h3>Create Theme</h3>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="form">
+            <mat-form-field>
+                <label>Name</label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+        </form>
+    </mat-card-content>
+    <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="submit()">Create</button>
+            <button mat-raised-button (click)="close()">Close</button>
+    </mat-card-actions>
+</mat-card>

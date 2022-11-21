@@ -1,0 +1,13 @@
+mat-card {
+    padding: 1em;
+
+    mat-card-actions {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin: 0 1em;
+        }
+    }
+}
+

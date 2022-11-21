@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -7,6 +8,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./theme-form.component.scss'],
 })
 export class ThemeFormComponent implements OnInit {
+
+  form: FormGroup = new FormGroup({
+    name: new FormControl('', [Validators.required]),
+  });
 
   constructor(
     public dialogRef: MatDialogRef<ThemeFormComponent>,
@@ -18,7 +23,11 @@ export class ThemeFormComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close({data: 'Hi'});
+    this.dialogRef.close();
+  }
+
+  submit(): void {
+    this.dialogRef.close(this.form.getRawValue());
   }
 
 }

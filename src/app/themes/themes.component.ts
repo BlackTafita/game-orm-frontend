@@ -1,6 +1,8 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Subject, switchMap, tap } from 'rxjs';
 import { ThemeFormComponent } from './theme-form/theme-form.component';
 import { ThemesService } from './themes.service';
 
@@ -33,15 +35,28 @@ export class ThemesComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
 
+  createThemeSub$: Subject<{name: string}> = new Subject<{name: string}>();
+
   constructor(
     private service: ThemesService,
     private dialog: MatDialog,
+    private _snackBar: MatSnackBar,
     ) {}
 
   ngOnInit(): void {
     this.service.getThemes().subscribe((res) => {
       console.log(res);
-    })
+    });
+
+    const createTheme$ = this.createThemeSub$.pipe(
+      switchMap(theme => this.service.createTheme(theme)),
+      tap((res) => {
+        console.log(res);
+        this._snackBar.open(`Theme "${res.name} created successfuly"`, 'OK');
+      }),
+    );
+
+    createTheme$.subscribe();
   }
 
   openThemeModal(): void {
@@ -49,6 +64,7 @@ export class ThemesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((themeData) => {
         console.log(themeData);
+        this.createThemeSub$.next(themeData);
     })
   }
 }
