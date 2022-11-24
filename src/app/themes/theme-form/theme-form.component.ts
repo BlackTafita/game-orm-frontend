@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Theme } from '../theme.interface';
 
 @Component({
   selector: 'app-theme-form',
@@ -15,11 +16,13 @@ export class ThemeFormComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ThemeFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: {theme?: Theme},
   ) {}
 
   ngOnInit(): void {
-    
+    if (this.data.theme?.id) {
+      this.form.patchValue({name: this.data.theme.name});
+    }
   }
 
   close(): void {
@@ -27,7 +30,7 @@ export class ThemeFormComponent implements OnInit {
   }
 
   submit(): void {
-    this.dialogRef.close(this.form.getRawValue());
+    this.dialogRef.close({...this.form.getRawValue(), id: this.data?.theme?.id});
   }
 
 }

@@ -1,41 +1,25 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subject, switchMap, tap } from 'rxjs';
+import { combineLatest, forkJoin, map, merge, Observable, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ThemeFormComponent } from './theme-form/theme-form.component';
+import { Theme } from './theme.interface';
 import { ThemesService } from './themes.service';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 @Component({
   selector: 'app-themes',
   templateUrl: './themes.component.html',
   styleUrls: ['./themes.component.scss']
 })
-export class ThemesComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+export class ThemesComponent implements OnInit, OnDestroy {
+  displayedColumns: string[] = ['id', 'name', 'actions'];
 
+  themes$!: Observable<Theme[]>;
+
+  private destroy$: Subject<void> = new Subject<void>();
   createThemeSub$: Subject<{name: string}> = new Subject<{name: string}>();
+  editThemeSub$: Subject<Theme> = new Subject<Theme>();
 
   constructor(
     private service: ThemesService,
@@ -44,27 +28,58 @@ export class ThemesComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    this.service.getThemes().subscribe((res) => {
-      console.log(res);
-    });
+    const getThemes$ = this.service.getThemes()
+    .pipe(
+      shareReplay(),
+    );
 
     const createTheme$ = this.createThemeSub$.pipe(
       switchMap(theme => this.service.createTheme(theme)),
       tap((res) => {
-        console.log(res);
-        this._snackBar.open(`Theme "${res.name} created successfuly"`, 'OK');
+        this._snackBar.open(`Theme "${res.name} created successfuly"`, 'Close');
       }),
+      switchMap((theme) => getThemes$.pipe(
+        map((themes) => {
+          themes.push(theme);
+          return themes;
+        }
+      ),
+    ))
     );
 
-    createTheme$.subscribe();
+    const editTheme$ = this.editThemeSub$.pipe(
+      switchMap((theme) => this.service.editTheme(theme)),
+      tap(() => this._snackBar.open(`Theme updated`, 'Close')),
+      switchMap((theme) => getThemes$.pipe(
+        map((themes) => {
+          return themes.map(t => {
+            if (t.id === theme.id) return theme;
+            return t; 
+          });
+        }
+      ),
+    ))
+    );
+
+    this.themes$ = merge(getThemes$, createTheme$, editTheme$);
+
   }
 
-  openThemeModal(): void {
-    const dialogRef = this.dialog.open(ThemeFormComponent, {});
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete()
+  }
 
-    dialogRef.afterClosed().subscribe((themeData) => {
+  openThemeModal(theme?: Theme): void {
+    const dialogRef = this.dialog.open(ThemeFormComponent, {data: {theme}});
+
+    dialogRef.afterClosed()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((themeData) => {
         console.log(themeData);
-        this.createThemeSub$.next(themeData);
+        if (themeData) {
+          themeData.id ? this.editThemeSub$.next(themeData) : this.createThemeSub$.next(themeData);
+        }
     })
   }
 }

@@ -28,4 +28,12 @@ export class ThemesService {
       catchError(err => EMPTY)
     );
   }
+
+  editTheme(theme: Theme): Observable<Theme> {
+    return this.http.patch(`${this.themeAPIUrl}/${theme.id}`, theme)
+    .pipe(
+      map((res: any) => res as Theme),
+      catchError(err => EMPTY)
+    );
+  }
 }
