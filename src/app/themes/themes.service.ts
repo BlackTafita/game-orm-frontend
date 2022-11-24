@@ -36,4 +36,12 @@ export class ThemesService {
       catchError(err => EMPTY)
     );
   }
+
+  deleteTheme(theme: Theme): Observable<Theme> {
+    return this.http.delete(`${this.themeAPIUrl}/${theme.id}`)
+    .pipe(
+      map((res: any) => theme),
+      catchError(err => EMPTY)
+    )
+  }
 }
