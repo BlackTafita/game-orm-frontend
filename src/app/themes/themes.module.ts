@@ -19,7 +19,6 @@ import { CoreModule } from '../core/core.module';
     ThemeFormComponent
   ],
   imports: [
-    BrowserModule,
     CommonModule,
     ThemesRoutingModule,
     HttpClientModule,

@@ -66,7 +66,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
     const deleteTag$ = this.deleteTagSub$.pipe(
       switchMap((tag) => this.service.deleteTag(tag)),
-      tap((tag) => this._snackBar.open(`Tag "${tag.name}" has deleted`)),
+      tap((tag) => this._snackBar.open(`Tag "${tag.name}" has deleted`, 'Close')),
       switchMap((tag) => tagsSub$.pipe(
         take(1),
         map((tags) => {
