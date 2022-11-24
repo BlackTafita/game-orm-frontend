@@ -1,23 +1,19 @@
-
-.navbar {
-    width: calc(100% - 2em);
-    height: calc(7vh - 2em);
+.actions {
     display: flex;
-    background-color: black;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    padding: 1em 1em;
-
-    .logo {
-        color: white;
-    }
-
-    .actions {
-        display: flex;
-        justify-content: flex-end;
-    }
+    color: white;
+    margin: 0 1em;
 
     .link {
-        color: white;
+        margin: 1em;
+
+        &:first-child {
+            margin: 0;
+        }
     }
 }
+
+.example-spacer {
+    flex: 1 1 auto;
+  }

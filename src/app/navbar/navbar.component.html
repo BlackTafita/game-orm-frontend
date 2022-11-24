@@ -1,10 +1,15 @@
-<div class="navbar">
-    <div class="logo">
-        <h3>{{'Game-ORM'}}</h3>
-    </div>
+<mat-toolbar color="primary">
+    <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Game-ORM</span>
+    <span class="example-spacer"></span>
     <div class="actions">
         <div class="link">
             <button mat-raised-button [routerLink]="'themes'">Themes</button>
         </div>
+        <div class="link">
+            <button mat-raised-button [routerLink]="'tags'">Tags</button>
+        </div>
     </div>
-</div>
+  </mat-toolbar>

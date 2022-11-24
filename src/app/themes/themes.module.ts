@@ -8,14 +8,9 @@ import {MatTableModule} from '@angular/material/table';
 import { ThemesService } from './themes.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatButtonModule } from '@angular/material/button';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatCardModule} from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 import { ThemeFormComponent } from './theme-form/theme-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CoreModule } from '../core/core.module';
 
 
 @NgModule({
@@ -28,16 +23,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ThemesRoutingModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    //Material
-    MatTableModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule,
+    CoreModule,
   ],
   providers: [
     ThemesService,
