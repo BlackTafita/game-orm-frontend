@@ -49,14 +49,15 @@ export class CardFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.data);
     if (this.data?.card?.id) {
       this.form.patchValue(this.data.card);
+      this.tags = [...this.data.card.tags];
     }
 
     this.themes$ = combineLatest([this.themesService.getThemes(), this.themeControl.valueChanges.pipe(startWith(null))])
     .pipe(
       map(([themes, themeSearch]: [Theme[], Theme | string]) => {
-        console.log(themes, themeSearch);
         if (themeSearch) {
           const filterVal = (typeof themeSearch === 'string') ? themeSearch.toLowerCase() : themeSearch.name.toLowerCase();
 
@@ -92,7 +93,6 @@ export class CardFormComponent implements OnInit {
   }
 
   getName(option: Theme | Tag): string {
-    console.log(option);
     return option?.name;
   }
 

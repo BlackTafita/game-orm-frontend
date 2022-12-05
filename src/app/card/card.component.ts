@@ -93,7 +93,8 @@ export class CardComponent implements OnInit, OnDestroy {
   }
 
   openCardModal(card?: Card): void {
-    const dialogRef = this.dialog.open(CardFormComponent, {data: card});
+    console.log(card);
+    const dialogRef = this.dialog.open(CardFormComponent, {data: { card }});
 
     dialogRef.afterClosed()
     .pipe(takeUntil(this.destroy$))

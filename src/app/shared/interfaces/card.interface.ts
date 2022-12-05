@@ -1,7 +1,10 @@
+import { Tag } from "./tags.interface";
+import { Theme } from "./theme.interface";
+
 export interface Card {
     id?: number;
     title: string;
     description: string;
-    tags: string[];
-    theme: number;
+    tags: Tag[];
+    theme: Theme;
 }
