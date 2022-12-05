@@ -1,0 +1,28 @@
+mat-card {
+    padding: 1em;
+
+    mat-card-actions {
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin: 0 1em;
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        .form-row {
+            display: flex;
+        }
+
+        mat-form-field {
+            margin: 0.5em 1em;
+            width: 100%;
+        
+        }
+    }
+}
+

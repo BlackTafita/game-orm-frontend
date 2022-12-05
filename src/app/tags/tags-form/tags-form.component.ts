@@ -1,14 +1,14 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Tag } from '../tags.interface';
+import { Tag } from '../../shared/interfaces/tags.interface';
 
 @Component({
   selector: 'app-tags-form',
   templateUrl: './tags-form.component.html',
   styleUrls: ['./tags-form.component.scss']
 })
-export class TagsFormComponent {
+export class TagsFormComponent implements OnInit {
   form: FormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
   });

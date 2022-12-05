@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject, ReplaySubject, switchMap, tap, take, map, merge, takeUntil } from 'rxjs';
 import { TagsFormComponent } from './tags-form/tags-form.component';
-import { Tag } from './tags.interface';
-import { TagsService } from './tags.service';
+import { Tag } from '../shared/interfaces/tags.interface';
+import { TagsService } from '../shared/services/tags.service';
 
 @Component({
   selector: 'app-tags',
@@ -31,8 +31,6 @@ export class TagsComponent implements OnInit, OnDestroy {
     const tagsSub$ = new ReplaySubject<Tag[]>();
 
     const getTags$ = this.service.getTags();
-
-    getTags$.subscribe();
 
     const createTag$ = this.createTagSub$.pipe(
       switchMap(tag => this.service.createTag(tag)),

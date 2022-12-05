@@ -1,0 +1,71 @@
+<mat-card>
+    <mat-card-header>
+        <h3>{{data && data.card?.id ? 'Edit' : 'Create'}} Card</h3>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="form">
+            <div class="form-row">
+                <mat-form-field appearance="fill">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="title">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Description</mat-label>
+                    <input matInput formControlName="description">
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <mat-form-field>
+                    <mat-label>Theme</mat-label>
+                    <input
+                    type="text"
+                    placeholder="Pick one"
+                    name="theme"
+                    matInput
+                    formControlName="theme"
+                    [matAutocomplete]="auto"
+                    />
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getName">
+                        <mat-option *ngFor="let theme of themes$ | async" [value]="theme">
+                            {{ theme.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <mat-form-field>
+                    <mat-label>Tags</mat-label>
+                    <mat-chip-grid #chipGrid aria-label="Tags selection">
+                        <mat-chip-row *ngFor="let tag of tags" (removed)="remove(tag)">
+                          {{tag.name}}
+                          <button matChipRemove [attr.aria-label]="'remove ' + tag.name">
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip-row>
+                      </mat-chip-grid>
+                    <input
+                    type="text"
+                    name="tags"
+                    placeholder="Pick one"
+                    matInput
+                    #tagsInput
+                    [formControl]="tagsControl"
+                    [matAutocomplete]="tagAuto"
+                    [matChipInputFor]="chipGrid"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    (matChipInputTokenEnd)="add($event)"
+                    />
+                    <mat-autocomplete autoActiveFirstOption #tagAuto="matAutocomplete" [displayWith]="getName" (optionSelected)="selected($event)">
+                        <mat-option *ngFor="let tag of tags$ | async" [value]="tag">
+                            {{ tag.name }}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="submit()">{{data && data.card?.id ? 'Edit' : 'Create'}}</button>
+            <button mat-raised-button (click)="close()">Close</button>
+    </mat-card-actions>
+</mat-card>

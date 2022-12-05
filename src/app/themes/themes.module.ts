@@ -5,7 +5,7 @@ import { ThemesRoutingModule } from './themes-routing.module';
 import { ThemesComponent } from './themes.component';
 
 import {MatTableModule} from '@angular/material/table';
-import { ThemesService } from './themes.service';
+import { ThemesService } from '../shared/services/themes.service';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 

@@ -2,10 +2,10 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { combineLatest, forkJoin, map, merge, Observable, ReplaySubject, share, shareReplay, startWith, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { map, merge, Observable, ReplaySubject, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { ThemeFormComponent } from './theme-form/theme-form.component';
-import { Theme } from './theme.interface';
-import { ThemesService } from './themes.service';
+import { Theme } from '../shared/interfaces/theme.interface';
+import { ThemesService } from '../shared/services/themes.service';
 
 @Component({
   selector: 'app-themes',
@@ -32,8 +32,6 @@ export class ThemesComponent implements OnInit, OnDestroy {
     const themesSub$ = new ReplaySubject<Theme[]>();
 
     const getThemes$ = this.service.getThemes();
-
-    getThemes$.subscribe();
 
     const createTheme$ = this.createThemeSub$.pipe(
       switchMap(theme => this.service.createTheme(theme)),
@@ -92,7 +90,7 @@ export class ThemesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.destroy$.complete()
+    this.destroy$.complete();
   }
 
   openThemeModal(theme?: Theme): void {

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, EMPTY, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Theme } from './theme.interface';
+import { Theme } from '../interfaces/theme.interface';
 
 @Injectable({
   providedIn: 'root'

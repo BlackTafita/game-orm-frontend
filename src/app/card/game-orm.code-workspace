@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../../../../game-orm-backend"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {}
+}

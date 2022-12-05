@@ -1,0 +1,21 @@
+.actions {
+    margin: 1em 0;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+        margin: 0 1em;
+
+        &:last-of-type {
+            margin: 0;
+        }
+    }
+}
+
+.actions-header {
+    text-align: right;
+    padding-right: 3em;
+}
