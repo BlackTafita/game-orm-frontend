@@ -25,6 +25,10 @@ import { SharedModule } from '../shared/shared.module';
     CoreModule,
     SharedModule,
   ],
+  exports: [
+    CardComponent,
+    CardFormComponent,
+  ],
   providers: [
     CardService,
   ]

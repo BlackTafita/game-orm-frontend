@@ -20,6 +20,10 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     CoreModule,
   ],
+  exports: [
+    TagsComponent,
+    TagsFormComponent,
+  ],
   providers: [
     TagsService,
   ]
