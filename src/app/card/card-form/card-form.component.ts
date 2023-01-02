@@ -19,9 +19,11 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 export class CardFormComponent implements OnInit {
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
-  imgPreview!: string;
+  imgPreview!: string | null;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tags: Tag[] = [];
+
+  errors: {[key: string]: boolean | null} = {};
 
   form: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -127,11 +129,11 @@ export class CardFormComponent implements OnInit {
   }
 
 
-  selectImage($event: any) {
-    const readed = $event.target.files;
+  selectImage(event: any) {
+    const readed = event.target.files;
     const parsed: any[] = [];
     const selectedFileNames = [];
-    console.log($event.target.files, $event.target.result, $event.target);
+    console.log(event.target.files, event.target.result, event.target);
 
     if (readed && readed[0]) {
       const numberOfFiles = readed.length;
@@ -140,6 +142,17 @@ export class CardFormComponent implements OnInit {
 
         reader.onload = (e: any) => {
           console.log(e.target.result);
+          const type = event.target.files[i].type;
+          const size = event.target.files[i].size;
+          this.errors = {};
+          this.imgPreview = null;
+          if (size > 5000000) {
+            this.errors['fileSize'] = true;
+            return;
+          }
+          if (!type.match('png')) {
+            this.errors['fileType'] = true;
+          }
           parsed.push(e.target.result);
           this.imgPreview = e.target.result;
         };
