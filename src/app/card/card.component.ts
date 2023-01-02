@@ -37,7 +37,7 @@ export class CardComponent implements OnInit, OnDestroy {
     .pipe(
       switchMap(card => this.service.createCard(card)),
       tap((res: Card) => {
-        this._snackBar.open(`Card "${res.title}" created successfuly`, 'Close')
+        this._snackBar.open(`Card "${res.description}" created successfuly`, 'Close')
       }),
       switchMap((card: Card) => cardsSub$.pipe(
         take(1),
@@ -58,18 +58,18 @@ export class CardComponent implements OnInit, OnDestroy {
             if (card.id === c.id) return card;
             return c;
           });
-        })  
+        })
       )),
     );
 
     const deleteCard$ = this.deleteCardSub$.pipe(
       switchMap(card => this.service.deleteCard(card)),
-      tap((card) => this._snackBar.open(`Card "${card.title}" has deleted`, 'Close')),
+      tap((card) => this._snackBar.open(`Card "${card.description}" has deleted`, 'Close')),
       switchMap((card) => cardsSub$.pipe(
         take(1),
         map((cards) => {
           const index = cards.findIndex((th: Card) => th.id === card.id);
-            if (index > -1) { 
+            if (index > -1) {
               cards.splice(index, 1);
             }
             return cards;

@@ -3,7 +3,7 @@ import { Theme } from "./theme.interface";
 
 export interface Card {
     id?: number;
-    title: string;
+    image: string;
     description: string;
     tags: Tag[];
     theme: Theme;

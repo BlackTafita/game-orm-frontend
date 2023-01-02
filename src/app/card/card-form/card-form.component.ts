@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { combineLatest, Observable, map, share, startWith } from 'rxjs';
+import { combineLatest, Observable, map, startWith } from 'rxjs';
 import { ThemesService } from 'src/app/shared/services/themes.service';
 import { Theme } from 'src/app/shared/interfaces/theme.interface';
 import { Card } from '../../shared/interfaces/card.interface';
@@ -19,7 +19,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 export class CardFormComponent implements OnInit {
   @ViewChild('tagsInput') tagsInput!: ElementRef<HTMLInputElement>;
 
-
+  imgPreview!: string;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tags: Tag[] = [];
 
@@ -28,7 +28,7 @@ export class CardFormComponent implements OnInit {
     description: new FormControl('', [Validators.required]),
     theme: new FormControl('', [Validators.required]),
     tags: new FormControl('', [Validators.required]),
-  }); 
+  });
 
   themes$!: Observable<Theme[]>;
   tags$!: Observable<Tag[]>;
@@ -53,6 +53,7 @@ export class CardFormComponent implements OnInit {
     if (this.data?.card?.id) {
       this.form.patchValue(this.data.card);
       this.tags = [...this.data.card.tags];
+      this.imgPreview = this.data.card.image;
     }
 
     this.themes$ = combineLatest([this.themesService.getThemes(), this.themeControl.valueChanges.pipe(startWith(null))])
@@ -89,7 +90,7 @@ export class CardFormComponent implements OnInit {
 
   submit(): void {
     console.log(this.form.getRawValue(), this.tags);
-    this.dialogRef.close({...this.form.getRawValue(), id: this.data?.card?.id, tags: this.tags});
+    this.dialogRef.close({...this.form.getRawValue(), id: this.data?.card?.id, tags: this.tags, image: this.imgPreview});
   }
 
   getName(option: Theme | Tag): string {
@@ -123,6 +124,33 @@ export class CardFormComponent implements OnInit {
     this.tags.push(event.option.value);
     this.tagsInput.nativeElement.value = '';
     this.tagsControl.setValue(null);
+  }
+
+
+  selectImage($event: any) {
+    const readed = $event.target.files;
+    const parsed: any[] = [];
+    const selectedFileNames = [];
+    console.log($event.target.files, $event.target.result, $event.target);
+
+    if (readed && readed[0]) {
+      const numberOfFiles = readed.length;
+      for (let i = 0; i < numberOfFiles; i++) {
+        const reader = new FileReader();
+
+        reader.onload = (e: any) => {
+          console.log(e.target.result);
+          parsed.push(e.target.result);
+          this.imgPreview = e.target.result;
+        };
+
+        reader.readAsDataURL(readed[i]);
+
+        selectedFileNames.push(readed[i].name);
+      }
+
+      console.log(parsed, selectedFileNames);
+    }
   }
 
 }
