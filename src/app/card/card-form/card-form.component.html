@@ -84,7 +84,7 @@
   <mat-card-actions>
     <button
       mat-raised-button
-      [disabled]="form.invalid || !imgPreview"
+      [disabled]="form.invalid"
       color="primary"
       (click)="submit()"
     >{{data && data.card?.id ? 'Edit' : 'Create'}}</button>

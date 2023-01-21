@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subject, ReplaySubject, switchMap, take, map, tap, merge, takeUntil } from 'rxjs';
+import {Observable, Subject, switchMap, take, map, tap, merge, takeUntil, BehaviorSubject} from 'rxjs';
 import { CardFormComponent } from './card-form/card-form.component';
 import { Card } from '../shared/interfaces/card.interface';
 import { CardService } from './card.service';
@@ -29,7 +29,7 @@ export class CardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const cardsSub$ = new ReplaySubject<Card[]>();
+    const cardsSub$ = new BehaviorSubject<Card[]>([]);
 
     const getCards$ = this.service.getCards();
 

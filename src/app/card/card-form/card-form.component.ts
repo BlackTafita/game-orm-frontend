@@ -26,10 +26,9 @@ export class CardFormComponent implements OnInit {
   errors: {[key: string]: boolean | null} = {};
 
   form: FormGroup = new FormGroup({
-    title: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     theme: new FormControl('', [Validators.required]),
-    tags: new FormControl('', [Validators.required]),
+    tags: new FormControl('', ),
   });
 
   themes$!: Observable<Theme[]>;
