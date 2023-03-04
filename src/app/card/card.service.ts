@@ -13,8 +13,8 @@ export class CardService {
 
   constructor(private http: HttpClient) { }
 
-  getCards(): Observable<Card[]> {
-    return this.http.get(this.cardAPIUrl)
+  getCards(queryString: string = ''): Observable<Card[]> {
+    return this.http.get(`${this.cardAPIUrl}?${queryString}`)
     .pipe(
       map((res: any) => res as Card[]),
       catchError((err) => EMPTY)

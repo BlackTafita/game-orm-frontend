@@ -10,21 +10,23 @@ import { CardFormComponent } from './card-form/card-form.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import { SharedModule } from '../shared/shared.module';
+import { MatSortModule } from "@angular/material/sort";
 
 @NgModule({
   declarations: [
     CardComponent,
     CardFormComponent
   ],
-  imports: [
-    CommonModule,
-    CardRoutingModule,
-    HttpClientModule,
-    MatAutocompleteModule,
-    MatChipsModule,
-    CoreModule,
-    SharedModule,
-  ],
+	imports: [
+		CommonModule,
+		CardRoutingModule,
+		HttpClientModule,
+		MatAutocompleteModule,
+		MatChipsModule,
+		CoreModule,
+		SharedModule,
+		MatSortModule,
+	],
   exports: [
     CardComponent,
     CardFormComponent,

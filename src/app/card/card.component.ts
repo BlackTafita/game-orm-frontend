@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {Observable, Subject, switchMap, take, map, tap, merge, takeUntil, BehaviorSubject} from 'rxjs';
+import { Observable, Subject, switchMap, take, map, tap, merge, takeUntil, BehaviorSubject, startWith } from 'rxjs';
 import { CardFormComponent } from './card-form/card-form.component';
 import { Card } from '../shared/interfaces/card.interface';
 import { CardService } from './card.service';
@@ -13,11 +13,13 @@ import { CardService } from './card.service';
 })
 export class CardComponent implements OnInit, OnDestroy {
 
-  displayedColumns: string[] = ['id', 'title', 'description', 'tags', 'theme', 'actions'];
+  displayedColumns: string[] = ['id', 'image', 'description', 'tags', 'theme', 'actions'];
 
   cards$!: Observable<Card[]>;
 
   private destroy$: Subject<void> = new Subject<void>();
+
+  getCardsSub$: Subject<string> = new Subject<string>();
   createCardSub$: Subject<Card> = new Subject<Card>();
   editCardSub$: Subject<Card> = new Subject<Card>();
   deleteCardSub$: Subject<Card> = new Subject<Card>();
@@ -31,7 +33,11 @@ export class CardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const cardsSub$ = new BehaviorSubject<Card[]>([]);
 
-    const getCards$ = this.service.getCards();
+    const getCards$ = this.getCardsSub$
+      .pipe(
+        startWith(''),
+        switchMap((querystring) => this.service.getCards(querystring))
+      );
 
     const createCard$ = this.createCardSub$
     .pipe(
@@ -108,6 +114,12 @@ export class CardComponent implements OnInit, OnDestroy {
 
   deleteCard(card: Card): void {
     this.deleteCardSub$.next(card);
+  }
+
+  sortCards($event: { active: string, direction: string }) {
+    console.log($event);
+    const sortStr = `sort=${$event.active},${$event.direction.toUpperCase()}`;
+    this.getCardsSub$.next(sortStr);
   }
 
 }
