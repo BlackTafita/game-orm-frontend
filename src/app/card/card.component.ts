@@ -35,7 +35,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
     const getCards$ = this.getCardsSub$
       .pipe(
-        startWith(''),
+        startWith('sort=id,DESC'),
         switchMap((querystring) => this.service.getCards(querystring))
       );
 
@@ -70,7 +70,7 @@ export class CardComponent implements OnInit, OnDestroy {
 
     const deleteCard$ = this.deleteCardSub$.pipe(
       switchMap(card => this.service.deleteCard(card)),
-      tap((card) => this._snackBar.open(`Card "${card.description}" has deleted`, 'Close')),
+      tap((card) => this._snackBar.open(`Card "${card?.description}" has deleted`, 'Close')),
       switchMap((card) => cardsSub$.pipe(
         take(1),
         map((cards) => {
