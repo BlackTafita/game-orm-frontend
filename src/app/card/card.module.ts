@@ -11,6 +11,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatChipsModule} from '@angular/material/chips';
 import { SharedModule } from '../shared/shared.module';
 import { MatSortModule } from "@angular/material/sort";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
@@ -26,6 +28,9 @@ import { MatSortModule } from "@angular/material/sort";
 		CoreModule,
 		SharedModule,
 		MatSortModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormFieldModule,
 	],
   exports: [
     CardComponent,

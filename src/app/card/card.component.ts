@@ -5,6 +5,7 @@ import { Observable, Subject, switchMap, take, map, tap, merge, takeUntil, Behav
 import { CardFormComponent } from './card-form/card-form.component';
 import { Card } from '../shared/interfaces/card.interface';
 import { CardService } from './card.service';
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-card',
@@ -24,6 +25,16 @@ export class CardComponent implements OnInit, OnDestroy {
   editCardSub$: Subject<Card> = new Subject<Card>();
   deleteCardSub$: Subject<Card> = new Subject<Card>();
 
+  cardsFilter = new FormControl('');
+
+
+  sortString: string = 'sort=id,DESC';
+  searchString: string = '';
+
+  get queryString(): string {
+    return `${this.searchString}&${this.sortString}`;
+  }
+
   constructor(
     private service: CardService,
     private dialog: MatDialog,
@@ -33,9 +44,24 @@ export class CardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const cardsSub$ = new BehaviorSubject<Card[]>([]);
 
+    this.cardsFilter.valueChanges
+      .pipe(
+        map(searchStr => {
+          if (searchStr && searchStr.length > 3) {
+            this.searchString = `s={"description": {"$cont": "${ searchStr }"}}`;
+          } else {
+            this.searchString = '';
+          }
+          return this.searchString;
+        }),
+        takeUntil(this.destroy$)
+      ).subscribe(() => {
+        this.getCardsSub$.next(this.queryString);
+    });
+
     const getCards$ = this.getCardsSub$
       .pipe(
-        startWith('sort=id,DESC'),
+        startWith(this.sortString),
         switchMap((querystring) => this.service.getCards(querystring))
       );
 
@@ -118,8 +144,8 @@ export class CardComponent implements OnInit, OnDestroy {
 
   sortCards($event: { active: string, direction: string }) {
     console.log($event);
-    const sortStr = `sort=${$event.active},${$event.direction.toUpperCase()}`;
-    this.getCardsSub$.next(sortStr);
+    this.sortString = `sort=${$event.active},${$event.direction.toUpperCase()}`;
+    this.getCardsSub$.next(this.queryString);
   }
 
 }

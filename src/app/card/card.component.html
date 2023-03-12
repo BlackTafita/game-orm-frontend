@@ -5,6 +5,13 @@
     </div>
 </div>
 
+<div class="row">
+  <mat-form-field class="full-width">
+    <mat-label>Search by card name</mat-label>
+    <input matInput [formControl]="cardsFilter" placeholder="Type here" value="">
+  </mat-form-field>
+</div>
+
 <table mat-table [dataSource]="cards$" matSort class="mat-elevation-z8" (matSortChange)="sortCards($event)">
 
     <!-- Id Column -->
